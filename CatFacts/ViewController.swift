@@ -43,22 +43,14 @@ class ViewController: UIViewController {
         let urlSession = NSURLSession(configuration: urlConfig)
         var dataTask : NSURLSessionDataTask = urlSession.dataTaskWithRequest(urlRequest, completionHandler:
             {data, response, error in
-                if(!error)
+                if(error == nil)
                 {
-                    let downloadedImage = UIImage(data: data)
-                    if(downloadedImage != nil)
-                    {
+                    let downloadedImage:UIImage = UIImage(data: data)
                         dispatch_async(dispatch_get_main_queue(), {
                             self.catImage.image = downloadedImage;
                             self.catImage.setNeedsDisplay()
                         })
                         println("Loaded Cat Image Sized \(imageWidth) x \(imageHeight)")
-                    }
-                    else
-                    {
-                        let returnedText: String = NSString(data: data, encoding:NSUTF8StringEncoding)
-                        println("No image returned. Received: \(returnedText)")
-                    }
                 }
                 else
                 {
@@ -84,17 +76,17 @@ class ViewController: UIViewController {
         let urlSession = NSURLSession(configuration: urlConfig)
         var dataTask :NSURLSessionDataTask = urlSession.dataTaskWithRequest(urlRequest, completionHandler:
             {data, response, error in
-                if(!error)
+                if(error == nil)
                 {
                     var dataDictonary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
-                    var returnedFact = dataDictonary["facts"] as NSArray
-                    var loadedFact = returnedFact[0] as String
+                    var returnedFacts = dataDictonary["facts"] as NSArray
+                    var firstFact = "\(returnedFacts[0])"
                     dispatch_async(dispatch_get_main_queue(), {
-                        self.catFact.text = loadedFact
+                        self.catFact.text = firstFact
                         self.catFact.backgroundColor = UIColor.grayColor().colorWithAlphaComponent(0.3)
                         self.catFact.setNeedsDisplay()
                     })
-                    println("Returned Fact: \(loadedFact)")
+                    println("Returned Fact: \(firstFact)")
                 }
                 else
                 {
