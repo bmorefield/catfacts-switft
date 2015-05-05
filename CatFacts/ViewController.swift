@@ -37,15 +37,15 @@ class ViewController: UIViewController {
     {
         // Now load a cat photo
         var placeKittenUrl = "http://placekitten.com/g/\(imageWidth)/\(imageHeight)"
-        let url = NSURL.URLWithString(placeKittenUrl)
-        var urlRequest = NSURLRequest(URL: url)
+        let url = NSURL(fileURLWithPath: placeKittenUrl)
+        var urlRequest = NSURLRequest(URL: url!)
         let urlConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         let urlSession = NSURLSession(configuration: urlConfig)
         var dataTask : NSURLSessionDataTask = urlSession.dataTaskWithRequest(urlRequest, completionHandler:
             {data, response, error in
                 if(error == nil)
                 {
-                    let downloadedImage:UIImage = UIImage(data: data)
+                    let downloadedImage:UIImage = UIImage(data: data)!
                         dispatch_async(dispatch_get_main_queue(), {
                             self.catImage.image = downloadedImage;
                             self.catImage.setNeedsDisplay()
@@ -70,16 +70,16 @@ class ViewController: UIViewController {
     {
         // Now load a fact abouts cats
         var catFactUrl = "http://catfacts-api.appspot.com/api/facts?number=1"
-        var url = NSURL.URLWithString(catFactUrl)
-        var urlRequest = NSURLRequest(URL: url)
+        var url = NSURL(fileURLWithPath: catFactUrl)
+        var urlRequest = NSURLRequest(URL: url!)
         let urlConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
         let urlSession = NSURLSession(configuration: urlConfig)
         var dataTask :NSURLSessionDataTask = urlSession.dataTaskWithRequest(urlRequest, completionHandler:
             {data, response, error in
                 if(error == nil)
                 {
-                    var dataDictonary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
-                    var returnedFacts = dataDictonary["facts"] as NSArray
+                    var dataDictonary: NSDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
+                    var returnedFacts = dataDictonary["facts"] as! NSArray
                     var firstFact = "\(returnedFacts[0])"
                     dispatch_async(dispatch_get_main_queue(), {
                         self.catFact.text = firstFact
